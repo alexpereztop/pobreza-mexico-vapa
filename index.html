@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pobreza en México 2008–2018 | Tablero con Google Charts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<style>
+  :root {
+    --tinta: #1d2b36;
+    --texto: #3c4a55;
+    --suave: #6b7a86;
+    --linea: #d9e0e5;
+    --fondo: #f3f6f8;
+    --panel: #ffffff;
+    --y2008: #9fb0bf;
+    --y2018: #0e6b70;
+    --alerta: #b8462e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Public Sans", "Segoe UI", Arial, sans-serif;
+    color: var(--texto);
+    background: var(--fondo);
+    line-height: 1.5;
+  }
+  header {
+    background: var(--tinta);
+    color: #fff;
+    padding: 36px 24px 40px;
+  }
+  .contenedor { max-width: 1240px; margin: 0 auto; }
+  header p.fuente { margin: 0 0 10px; color: #b8c6d1; font-size: 0.95rem; }
+  header h1 {
+    margin: 0 0 18px;
+    font-weight: 800;
+    font-size: clamp(1.7rem, 3.6vw, 2.6rem);
+    line-height: 1.15;
+    max-width: 22ch;
+  }
+  .paradoja {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 0;
+    border-top: 1px solid #3e5263;
+    margin-top: 26px;
+  }
+  .dato { padding: 18px 20px 4px 0; }
+  .dato strong {
+    display: block;
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+  }
+  .dato span { color: #c9d5de; font-size: 0.95rem; }
+  .baja { color: #7fd1c4; }
+  .sube { color: #f2a48f; }
+  main { padding: 28px 24px 12px; }
+  .intro { max-width: 75ch; margin: 0 0 22px; }
+  .rejilla {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 18px;
+  }
+  .grafico {
+    background: var(--panel);
+    border: 1px solid var(--linea);
+    border-radius: 6px;
+    padding: 18px 18px 10px;
+    grid-column: span 6;
+    min-width: 0;
+  }
+  .grafico.ancho { grid-column: span 12; }
+  .grafico h2 {
+    margin: 0 0 4px;
+    font-size: 1.08rem;
+    color: var(--tinta);
+    font-weight: 800;
+  }
+  .grafico p.lectura { margin: 0 0 8px; font-size: 0.92rem; color: var(--suave); }
+  .lienzo { width: 100%; height: 340px; }
+  .lienzo.alto { height: 400px; }
+  .num { color: var(--suave); font-weight: 600; font-size: 0.85rem; margin-right: 6px; }
+  footer {
+    padding: 18px 24px 32px;
+    font-size: 0.85rem;
+    color: var(--suave);
+  }
+  footer a { color: var(--y2018); }
+  @media (max-width: 860px) {
+    .grafico, .grafico.ancho { grid-column: span 12; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="contenedor">
+    <p class="fuente">Medición multidimensional de la pobreza en México, CONEVAL (2019)</p>
+    <h1>En diez años bajó el porcentaje de pobreza, pero hay más personas pobres</h1>
+    <div class="paradoja">
+      <div class="dato"><strong class="baja">44.4% → 41.9%</strong><span>Población en situación de pobreza, 2008 a 2018</span></div>
+      <div class="dato"><strong class="sube">49.5 → 52.4 M</strong><span>Personas en situación de pobreza, 2008 a 2018</span></div>
+      <div class="dato"><strong class="baja">11.0% → 7.4%</strong><span>Población en pobreza extrema, 2008 a 2018</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="contenedor">
+  <p class="intro">Tablero elaborado con Google Charts a partir del comunicado de prensa n.º 10 del CONEVAL. Pasa el cursor sobre cada gráfico para ver los valores exactos. En todos los gráficos, el gris corresponde a 2008 y el verde azulado a 2018.</p>
+
+  <div class="rejilla">
+    <section class="grafico">
+      <h2><span class="num">1</span>Personas en pobreza y en pobreza extrema</h2>
+      <p class="lectura">Millones de personas. La pobreza creció en número aunque bajó en porcentaje.</p>
+      <div id="g1" class="lienzo"></div>
+    </section>
+
+    <section class="grafico">
+      <h2><span class="num">2</span>Composición de la población en 2018</h2>
+      <p class="lectura">Porcentaje de la población total según su situación de pobreza.</p>
+      <div id="g2" class="lienzo"></div>
+    </section>
+
+    <section class="grafico ancho">
+      <h2><span class="num">3</span>Carencias sociales, 2008 y 2018</h2>
+      <p class="lectura">Porcentaje de la población con cada carencia. Todas bajaron; la de servicios de salud fue la que más se redujo.</p>
+      <div id="g3" class="lienzo alto"></div>
+    </section>
+
+    <section class="grafico">
+      <h2><span class="num">4</span>Ingreso por debajo de las líneas de pobreza</h2>
+      <p class="lectura">Barras: millones de personas. Líneas: porcentaje de la población.</p>
+      <div id="g4" class="lienzo"></div>
+    </section>
+
+    <section class="grafico">
+      <h2><span class="num">5</span>Brechas entre grupos de población</h2>
+      <p class="lectura">Porcentaje en situación de pobreza en cada grupo, de 2008 a 2018.</p>
+      <div id="g5" class="lienzo"></div>
+    </section>
+
+    <section class="grafico ancho">
+      <h2><span class="num">6</span>Entidades con mayor porcentaje de pobreza en 2018</h2>
+      <p class="lectura">Las cuatro entidades del sureste que el CONEVAL señala como el mayor reto. Oaxaca y Veracruz empeoraron en la década.</p>
+      <div id="g6" class="lienzo alto"></div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="contenedor">
+    Fuente: Consejo Nacional de Evaluación de la Política de Desarrollo Social (CONEVAL). (2019). <em>10 años de medición de pobreza en México, avances y retos en política social</em> [Comunicado de prensa n.º 10].
+    <a href="https://www.coneval.org.mx/SalaPrensa/Comunicadosprensa/Documents/2019/COMUNICADO_10_MEDICION_POBREZA_2008_2018.pdf">Consultar el documento</a>.
+    Elaborado por Victor Alejandro Perez Ayala para la asignatura Visualización gráfica de datos, UVM.
+  </div>
+</footer>
+
+<script>
+  var C2008 = '#9fb0bf', C2018 = '#0e6b70', ALERTA = '#b8462e', TINTA = '#1d2b36';
+  var base = {
+    fontName: 'Public Sans',
+    backgroundColor: 'transparent',
+    legend: { position: 'top', textStyle: { color: '#3c4a55', fontSize: 12 } },
+    tooltip: { textStyle: { fontSize: 13 } },
+    chartArea: { left: 60, right: 20, top: 40, bottom: 50 },
+    hAxis: { textStyle: { color: '#3c4a55' } },
+    vAxis: { textStyle: { color: '#3c4a55' }, gridlines: { color: '#e6ebef' }, minorGridlines: { count: 0 } }
+  };
+  function opciones(extra) { return Object.assign({}, base, extra); }
+
+  google.charts.load('current', { packages: ['corechart', 'geochart'], language: 'es' });
+  google.charts.setOnLoadCallback(dibujar);
+
+  function dibujar() {
+    // 1. Gráfico de columnas: personas en pobreza (millones)
+    var d1 = google.visualization.arrayToDataTable([
+      ['Indicador', '2008', '2018'],
+      ['Pobreza', 49.5, 52.4],
+      ['Pobreza extrema', 12.3, 9.3]
+    ]);
+    var f1 = new google.visualization.NumberFormat({ fractionDigits: 1, suffix: ' millones' });
+    f1.format(d1, 1); f1.format(d1, 2);
+    new google.visualization.ColumnChart(document.getElementById('g1')).draw(d1, opciones({
+      colors: [C2008, C2018],
+      vAxis: Object.assign({}, base.vAxis, { title: 'Millones de personas', minValue: 0 }),
+      bar: { groupWidth: '62%' },
+      annotations: { alwaysOutside: true }
+    }));
+
+    // 2. Gráfico de anillo: composición 2018
+    var d2 = google.visualization.arrayToDataTable([
+      ['Situación', 'Porcentaje'],
+      ['Pobreza moderada', 34.5],
+      ['Pobreza extrema', 7.4],
+      ['No pobre (incluye población vulnerable)', 58.1]
+    ]);
+    var f2 = new google.visualization.NumberFormat({ fractionDigits: 1, suffix: '%' });
+    f2.format(d2, 1);
+    new google.visualization.PieChart(document.getElementById('g2')).draw(d2, opciones({
+      pieHole: 0.5,
+      colors: [C2018, ALERTA, '#d5dde3'],
+      pieSliceText: 'percentage',
+      pieSliceTextStyle: { color: '#ffffff', fontSize: 13 },
+      legend: { position: 'right', alignment: 'center', textStyle: { color: '#3c4a55', fontSize: 12 } },
+      chartArea: { left: 10, right: 10, top: 20, bottom: 20 },
+      pieStartAngle: 0
+    }));
+
+    // 3. Gráfico de barras horizontales: carencias sociales
+    var d3 = google.visualization.arrayToDataTable([
+      ['Carencia', '2008', '2018'],
+      ['Acceso a la seguridad social', 65.0, 57.3],
+      ['Servicios básicos en la vivienda', 22.9, 19.8],
+      ['Acceso a la alimentación', 21.7, 20.4],
+      ['Rezago educativo', 21.9, 16.9],
+      ['Acceso a los servicios de salud', 38.4, 16.2],
+      ['Calidad y espacios de la vivienda', 17.7, 11.1]
+    ]);
+    f2.format(d3, 1); f2.format(d3, 2);
+    new google.visualization.BarChart(document.getElementById('g3')).draw(d3, opciones({
+      colors: [C2008, C2018],
+      chartArea: { left: 230, right: 30, top: 40, bottom: 50 },
+      hAxis: { textStyle: { color: '#3c4a55' }, title: 'Porcentaje de la población', minValue: 0, maxValue: 70, gridlines: { color: '#e6ebef' } },
+      vAxis: { textStyle: { color: '#1d2b36', fontSize: 13 } },
+      bar: { groupWidth: '70%' }
+    }));
+
+    // 4. Gráfico combinado: ingreso inferior a las líneas de pobreza
+    var d4 = google.visualization.arrayToDataTable([
+      ['Año', 'Debajo de la línea de pobreza por ingresos (millones)', 'Debajo de la línea de pobreza extrema por ingresos (millones)', '% debajo de la línea de pobreza por ingresos', '% debajo de la línea de pobreza extrema por ingresos'],
+      ['2008', 54.7, 18.7, 49.0, 16.8],
+      ['2018', 61.1, 21.0, 48.8, 16.8]
+    ]);
+    var fm = new google.visualization.NumberFormat({ fractionDigits: 1, suffix: ' millones' });
+    fm.format(d4, 1); fm.format(d4, 2); f2.format(d4, 3); f2.format(d4, 4);
+    new google.visualization.ComboChart(document.getElementById('g4')).draw(d4, opciones({
+      seriesType: 'bars',
+      series: {
+        0: { color: C2018, targetAxisIndex: 0 },
+        1: { color: ALERTA, targetAxisIndex: 0 },
+        2: { type: 'line', color: TINTA, targetAxisIndex: 1, pointSize: 7, lineWidth: 2 },
+        3: { type: 'line', color: '#c98b2b', targetAxisIndex: 1, pointSize: 7, lineWidth: 2, lineDashStyle: [5, 4] }
+      },
+      vAxes: {
+        0: { title: 'Millones de personas', minValue: 0, maxValue: 70, textStyle: { color: '#3c4a55' }, gridlines: { color: '#e6ebef' } },
+        1: { title: 'Porcentaje', minValue: 0, maxValue: 70, textStyle: { color: '#3c4a55' }, gridlines: { count: 0 } }
+      },
+      legend: { position: 'bottom', maxLines: 4, textStyle: { color: '#3c4a55', fontSize: 11 } },
+      chartArea: { left: 60, right: 60, top: 20, bottom: 90 }
+    }));
+
+    // 5. Gráfico de líneas (pendiente): brechas entre grupos
+    var d5 = google.visualization.arrayToDataTable([
+      ['Año', 'Hablante de lengua indígena', 'Zonas rurales', 'Menores de 18 años', 'Adultos mayores (65 o más)', 'No hablante de lengua indígena', 'Zonas urbanas'],
+      ['2008', 76.0, 62.5, 53.3, 44.9, 41.4, 38.9],
+      ['2018', 74.9, 55.3, 49.6, 41.1, 39.4, 37.6]
+    ]);
+    for (var c = 1; c <= 6; c++) f2.format(d5, c);
+    new google.visualization.LineChart(document.getElementById('g5')).draw(d5, opciones({
+      colors: [ALERTA, '#c98b2b', '#6a4c93', '#3d7fb0', '#7aa6a8', C2018],
+      pointSize: 7,
+      lineWidth: 2,
+      legend: { position: 'right', alignment: 'center', textStyle: { color: '#3c4a55', fontSize: 11 } },
+      chartArea: { left: 50, right: 190, top: 20, bottom: 40 },
+      vAxis: Object.assign({}, base.vAxis, { title: 'Porcentaje en pobreza', minValue: 30, maxValue: 80 }),
+      hAxis: { textStyle: { color: '#1d2b36', fontSize: 13 } }
+    }));
+
+    // 6. Mapa geográfico: entidades con mayor porcentaje de pobreza
+    var d6 = new google.visualization.DataTable();
+    d6.addColumn('string', 'Código');
+    d6.addColumn('string', 'Entidad');
+    d6.addColumn('number', 'Pobreza 2018 (%)');
+    d6.addColumn({ type: 'string', role: 'tooltip', p: { html: true } });
+    d6.addRows([
+      ['MX-CHP', 'Chiapas', 76.4, '<div style="padding:8px 10px;font:13px Public Sans,Arial"><b>Chiapas</b><br>2008: 77.0%<br>2018: 76.4%</div>'],
+      ['MX-GRO', 'Guerrero', 66.5, '<div style="padding:8px 10px;font:13px Public Sans,Arial"><b>Guerrero</b><br>2008: 68.4%<br>2018: 66.5%</div>'],
+      ['MX-OAX', 'Oaxaca', 66.4, '<div style="padding:8px 10px;font:13px Public Sans,Arial"><b>Oaxaca</b><br>2008: 61.8%<br>2018: 66.4%</div>'],
+      ['MX-VER', 'Veracruz', 61.8, '<div style="padding:8px 10px;font:13px Public Sans,Arial"><b>Veracruz</b><br>2008: 51.2%<br>2018: 61.8%</div>']
+    ]);
+    var vista = new google.visualization.DataView(d6);
+    vista.setColumns([0, 2, 3]);
+    new google.visualization.GeoChart(document.getElementById('g6')).draw(vista, {
+      region: 'MX',
+      resolution: 'provinces',
+      colorAxis: { minValue: 60, maxValue: 78, colors: ['#f6d6c9', ALERTA] },
+      datalessRegionColor: '#e9eef1',
+      backgroundColor: 'transparent',
+      legend: { textStyle: { color: '#3c4a55', fontSize: 12 }, numberFormat: '#.#' },
+      tooltip: { isHtml: true }
+    });
+  }
+
+  var espera;
+  window.addEventListener('resize', function () {
+    clearTimeout(espera);
+    espera = setTimeout(dibujar, 250);
+  });
+</script>
+</body>
+</html>
